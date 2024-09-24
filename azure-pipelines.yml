@@ -24,7 +24,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/p:OutputPath=$(Build.ArtifactStagingDirectory)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -32,6 +32,7 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-- task: PowerShell@2
+- task: PublishBuildArtifacts@1
   inputs:
-    filePath: 'AWS/azureoperationsscript.ps1 -OrganizationUrl https://dev.azure.com/AzurePipeline-AWS-EC2/ -PAT https://dev.azure.com/AzurePipeline-AWS-EC2/ -OrganizationName AzurePipeline-AWS-EC2'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'build-output'
