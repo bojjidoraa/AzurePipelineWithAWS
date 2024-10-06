@@ -32,8 +32,7 @@ steps:
       $vsToolsPath = Join-Path $scriptRootPath "vs_buildtools.exe"
       
       $Result = Start-Process $vsToolsPath -ArgumentList $AllArgs -Wait
-      return $Result
-      }
+      
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
