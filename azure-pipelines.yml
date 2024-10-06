@@ -16,7 +16,33 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
-
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # escape=`
+      
+      FROM mcr.microsoft.com/windows/servercore:ltsc2019
+      
+      # Workaround to build image
+      # See. https://stackoverflow.com/questions/76470752/chocolatey-installation-in-docker-started-to-fail-restart-due-to-net-framework
+      ENV chocolateyVersion=1.4.0
+      
+      # Set the shell to PowerShell
+      SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+      
+      # Install Chocolatey - a package manager for Windows
+      RUN Set-ExecutionPolicy Bypass -Scope Process -Force;  `
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;  `
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
+      
+      # Install build dependencies using Chocolatey
+      RUN choco install cmake --installargs 'ADD_CMAKE_TO_PATH=User' -y; `
+          choco install ninja -y; `
+          choco install git -y; `
+          choco install python3 --version=3.12.0 -y; `
+          # ⬇️ this line leads to broken Docker builds 
+          choco install visualstudio2019buildtools --allWorkloads --includeRecommended --includeOptional --passive;
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
