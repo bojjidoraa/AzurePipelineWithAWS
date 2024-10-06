@@ -20,17 +20,4 @@ steps:
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: |
-      function install-VS19BuildTools{
-      # add the workloads you want to install on your server
-      
-      $AllArgs = "--quiet --add Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools --add Microsoft.VisualStudio.Workload.WebBuildTools --add Microsoft.VisualStudio.Workload.NetCoreBuildTools --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --add Microsoft.Net.Component.4.7.TargetingPack --includeRecommended --wait"
-      
-      $scriptRootPath = $PSScriptRoot
-      $vsToolsPath = Join-Path $scriptRootPath "vs_buildtools.exe"
-      
-      $Result = Start-Process $vsToolsPath -ArgumentList $AllArgs -Wait
-      return $Result
-      }
-      
-      install-VS19BuildTools
+    script: 'choco install visualstudio2019buildtools'
