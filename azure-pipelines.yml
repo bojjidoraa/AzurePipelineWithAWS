@@ -19,6 +19,14 @@ steps:
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
+    script: 'choco uninstall visualstudio2019-workload-vctools'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'choco install visualstudio2022-workload-vctools'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
     script: |
       # escape=`
       
