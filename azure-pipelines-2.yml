@@ -30,8 +30,7 @@ steps:
       
       $scriptRootPath = $PSScriptRoot
       $vsToolsPath = Join-Path $scriptRootPath "vs_buildtools.exe"
-      
-      $Result = Start-Process $vsToolsPath -ArgumentList $AllArgs -Wait
+     
       
 - task: VSBuild@1
   inputs:
